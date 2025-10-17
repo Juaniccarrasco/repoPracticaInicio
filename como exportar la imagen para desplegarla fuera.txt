@@ -1,0 +1,60 @@
+Exacto ✅. Si tú u otro usuario queréis usar el contenedor en otro ordenador, **necesitáis tener la imagen Docker primero**, porque el contenedor se crea a partir de esa imagen.
+
+---
+
+### 🧭 Opciones para obtener la imagen en otro ordenador
+
+#### 1. **Subirla a Docker Hub (o otro registro)**
+La forma más común:
+
+```bash
+docker tag mi-app usuario/mi-app
+docker push usuario/mi-app
+```
+
+Luego, en otro ordenador:
+
+```bash
+docker pull usuario/mi-app
+docker run -p 5000:5000 usuario/mi-app
+```
+
+> 📝 Necesitas tener cuenta en Docker Hub o usar otro registro como GitHub Container Registry, AWS ECR, etc.
+
+---
+
+#### 2. **Exportarla como archivo `.tar`**
+Si no quieres usar internet:
+
+```bash
+docker save mi-app > mi-app.tar
+```
+
+Luego puedes copiar ese archivo a otro ordenador (por USB, red, etc.) y cargarla allí:
+
+```bash
+docker load < mi-app.tar
+```
+
+---
+
+#### 3. **Reconstruir la imagen desde el Dockerfile**
+Si tienes el proyecto con el `Dockerfile`, `app.py` y `requirements.txt`, puedes simplemente copiar esos archivos al otro ordenador y ejecutar:
+
+```bash
+docker build -t mi-app .
+```
+
+> Esto requiere conexión si la imagen base (`python:3.11-slim`) no está ya descargada.
+
+---
+
+### 🧠 En resumen
+
+| Método | Requiere conexión | Ideal para |
+|--------|-------------------|------------|
+| `docker push/pull` | ✅ Sí | Compartir públicamente o en equipo |
+| `docker save/load` | ❌ No | Transferencia local o sin red |
+| `docker build` | ✅ Sí (si imagen base no está) | Reproducir desde código fuente |
+
+¿Quieres que te ayude a subir tu imagen a Docker Hub o crear el `.tar` para compartirla?
